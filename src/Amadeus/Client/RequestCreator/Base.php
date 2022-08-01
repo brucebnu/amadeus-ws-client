@@ -104,6 +104,7 @@ class Base implements RequestCreatorInterface
      */
     protected function checkMessageIsInWsdl($messageName)
     {
+        // dd($messageName, $this->messagesAndVersions);
         if (!array_key_exists($messageName, $this->messagesAndVersions)) {
             throw new InvalidMessageException('Message "'.$messageName.'" is not in WDSL');
         }

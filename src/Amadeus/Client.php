@@ -1884,6 +1884,8 @@ class Client extends Base
 
         $this->lastMessage = $messageName;
 
+         // \Amadeus\Client\RequestOptions\PayGetVirtualCardDetailsOptions::class;
+// dd($messageName, $options,$messageOptions);
         $sendResult = $this->sessionHandler->sendMessage(
             $messageName,
             $this->requestCreator->createRequest(
@@ -1892,7 +1894,7 @@ class Client extends Base
             ),
             $messageOptions
         );
-
+// dd($sendResult);
         $response = $this->responseHandler->analyzeResponse(
             $sendResult,
             $messageName

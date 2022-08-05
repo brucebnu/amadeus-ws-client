@@ -38,6 +38,7 @@ class ValidityPeriod
      *
      * @var string
      */
+    public $StartDate;
     public $EndDate;
 
     /**
@@ -47,6 +48,7 @@ class ValidityPeriod
      */
     public function __construct(PayGenerateVirtualCardOptions $params)
     {
-        $this->EndDate = $params->endValidityPeriod;
+        $this->EndDate      = $params->startValidityPeriod;
+        $this->StartDate    = $params->endValidityPeriod;
     }
 }

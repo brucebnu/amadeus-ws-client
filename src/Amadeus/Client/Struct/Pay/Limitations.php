@@ -43,8 +43,12 @@ class Limitations
      */
     public function __construct(PayGenerateVirtualCardOptions $params)
     {
-        if ($params->maxAlowedTransactions !== null) {
+        if ($params->maxAllowedTransactions !== null) {
             $this->AllowedTransactions = new AllowedTransactions($params);
+        }
+
+        if ($params->startValidityPeriod !== null) {
+            $this->ValidityPeriod = new ValidityPeriod($params);
         }
 
         if ($params->endValidityPeriod !== null) {

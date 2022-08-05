@@ -96,6 +96,7 @@ class Result
      */
     public function __construct($sendResult, $status = self::STATUS_OK)
     {
+        // dd($sendResult);
         $this->response = $sendResult->responseObject;
         $this->responseXml = $sendResult->responseXml;
         $this->status = $status;

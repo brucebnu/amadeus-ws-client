@@ -89,6 +89,7 @@ class Base implements RequestCreatorInterface
 
         $builder = $this->findBuilderForMessage($messageName);
 
+        // dd($builder->convert($params, $this->getActiveVersionFor($messageName)));
         if ($builder instanceof ConvertInterface) {
             return $builder->convert($params, $this->getActiveVersionFor($messageName));
         } else {

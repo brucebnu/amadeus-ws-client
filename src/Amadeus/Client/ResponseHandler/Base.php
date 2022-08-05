@@ -61,8 +61,9 @@ class Base implements ResponseHandlerInterface
             return $this->makeResultForException($sendResult);
         }
 
+        \Amadeus\Client\ResponseHandler\PAY\HandlerGetVirtualCardDetails::class;
         $handler = $this->findHandlerForMessage($messageName);
-
+// dd($handler, $handler instanceof MessageResponseHandler);
         if ($handler instanceof MessageResponseHandler) {
             return $handler->analyze($sendResult);
         } else {

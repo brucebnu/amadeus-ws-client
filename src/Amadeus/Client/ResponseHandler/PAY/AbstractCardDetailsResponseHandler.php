@@ -33,18 +33,22 @@ use Amadeus\Client\ResponseHandler\StandardResponseHandler;
  */
 abstract class AbstractCardDetailsResponseHandler extends StandardResponseHandler
 {
+    /**
+     * @param $analyzeResponse  \Amadeus\Client\Result
+     * @param $domXpath
+     * @return mixed
+     */
     protected function fillCardDetails($analyzeResponse, $domXpath)
     {
+        // dd($analyzeResponse,$domXpath);
         $cardNumber = $domXpath->query('//fop:PrimaryAccountNumber');
         if ($cardNumber->length > 0) {
-            $analyzeResponse->response->Success->VirtualCard->Card->PrimaryAccountNumber =
-                $cardNumber->item(0)->nodeValue;
+            $analyzeResponse->response->Success->VirtualCard->Card->PrimaryAccountNumber = $cardNumber->item(0)->nodeValue;
         }
 
         $cvvNumber = $domXpath->query('//fop:CVV');
         if ($cvvNumber->length > 0) {
-            $analyzeResponse->response->Success->VirtualCard->Card->CVV =
-                $cvvNumber->item(0)->nodeValue;
+            $analyzeResponse->response->Success->VirtualCard->Card->CVV = $cvvNumber->item(0)->nodeValue;
         }
 
         $address = $domXpath->query('//fop:AddressVerificationSystemValue');
@@ -52,44 +56,34 @@ abstract class AbstractCardDetailsResponseHandler extends StandardResponseHandle
             if (empty($analyzeResponse->response->Success->VirtualCard->Card->AddressVerificationSystemValue)) {
                 $analyzeResponse->response->Success->VirtualCard->Card->AddressVerificationSystemValue = new \stdClass();
             }
-            $analyzeResponse->response->Success->VirtualCard->Card->AddressVerificationSystemValue->Line =
-                $address->item(0)->nodeValue;
-            $analyzeResponse->response->Success->VirtualCard->Card->AddressVerificationSystemValue->CityName =
-                $address->item(0)->getAttribute('CityName');
-            $analyzeResponse->response->Success->VirtualCard->Card->AddressVerificationSystemValue->PostalCode =
-                $address->item(0)->getAttribute('PostalCode');
-            $analyzeResponse->response->Success->VirtualCard->Card->AddressVerificationSystemValue->Country =
-                $address->item(0)->getAttribute('Country');
+            $analyzeResponse->response->Success->VirtualCard->Card->AddressVerificationSystemValue->Line = $address->item(0)->nodeValue;
+            $analyzeResponse->response->Success->VirtualCard->Card->AddressVerificationSystemValue->CityName = $address->item(0)->getAttribute('CityName');
+            $analyzeResponse->response->Success->VirtualCard->Card->AddressVerificationSystemValue->PostalCode = $address->item(0)->getAttribute('PostalCode');
+            $analyzeResponse->response->Success->VirtualCard->Card->AddressVerificationSystemValue->Country = $address->item(0)->getAttribute('Country');
         }
 
         $limitations = $domXpath->query('//pay:Limitations');
         if ($limitations->length > 0) {
             $limitationsNodes = $limitations->item(0)->childNodes;
-            $analyzeResponse->response->Success->VirtualCard->AllowedTransactions =
-                $limitationsNodes->item(0)->getAttribute('Maximum');
-            $analyzeResponse->response->Success->VirtualCard->ValidityPeriod =
-                $limitationsNodes->item(1)->getAttribute('EndDate');
+            $analyzeResponse->response->Success->VirtualCard->AllowedTransactions = $limitationsNodes->item(0)->getAttribute('Maximum');
+            // dd($domXpath, $limitations->length);
+            // dd($analyzeResponse, $limitationsNodes->item(1)->getAttribute('StartDate'), $limitationsNodes->item(1)->getAttribute('EndDate'));
+            $analyzeResponse->response->Success->VirtualCard->ValidityPeriod = $limitationsNodes->item(1)->getAttribute('EndDate');
         }
 
 
         $balance = $domXpath->query('//pay:Value[@Type=\'AvailableBalance\']');
         if ($balance->length > 0) {
-            $analyzeResponse->response->Success->VirtualCard->Amount =
-                $balance->item(0)->getAttribute('Amount');
-            $analyzeResponse->response->Success->VirtualCard->DecimalPlaces =
-                $balance->item(0)->getAttribute('DecimalPlaces');
-            $analyzeResponse->response->Success->VirtualCard->CurrencyCode =
-                $balance->item(0)->getAttribute('CurrencyCode');
+            $analyzeResponse->response->Success->VirtualCard->Amount = $balance->item(0)->getAttribute('Amount');
+            $analyzeResponse->response->Success->VirtualCard->DecimalPlaces = $balance->item(0)->getAttribute('DecimalPlaces');
+            $analyzeResponse->response->Success->VirtualCard->CurrencyCode = $balance->item(0)->getAttribute('CurrencyCode');
         }
 
         $balance = $domXpath->query('//pay:Value[@Type=\'OnCard\']');
         if ($balance->length > 0) {
-            $analyzeResponse->response->Success->VirtualCard->Amount =
-                $balance->item(0)->getAttribute('Amount');
-            $analyzeResponse->response->Success->VirtualCard->DecimalPlaces =
-                $balance->item(0)->getAttribute('DecimalPlaces');
-            $analyzeResponse->response->Success->VirtualCard->CurrencyCode =
-                $balance->item(0)->getAttribute('CurrencyCode');
+            $analyzeResponse->response->Success->VirtualCard->Amount        = $balance->item(0)->getAttribute('Amount');
+            $analyzeResponse->response->Success->VirtualCard->DecimalPlaces = $balance->item(0)->getAttribute('DecimalPlaces');
+            $analyzeResponse->response->Success->VirtualCard->CurrencyCode  = $balance->item(0)->getAttribute('CurrencyCode');
         }
 
         return $analyzeResponse;

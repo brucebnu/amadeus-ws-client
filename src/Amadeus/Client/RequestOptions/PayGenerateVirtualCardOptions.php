@@ -79,11 +79,12 @@ class PayGenerateVirtualCardOptions extends Base
     /**
      * @var integer
      */
-    public $maxAlowedTransactions;
+    public $maxAllowedTransactions;
 
     /**
      * Date YYYY-MM-DD
      * @var string
      */
+    public $startValidityPeriod;
     public $endValidityPeriod;
 }
